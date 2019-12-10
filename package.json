@@ -1,0 +1,17 @@
+{
+  "name": "jupyter",
+  "version": "1.0.0",
+  "description": "Initialize a Jupyter Notebook server for data science applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@cto.ai/sdk": "^1.4.5",
+    "child_process": "^1.0.2",
+    "fuzzy": "^0.1.3"
+  }
+}
