@@ -1,4 +1,6 @@
-# 🚀 CTO.ai - Official Op - Jupyter 🚀
+![](https://raw.githubusercontent.com/cto-ai/jupyter/master/assets/banner.png)
+
+# Jupyter 🚀
 
 An Op to create and destroy JupyterLab Servers for use in data science.
 
@@ -37,9 +39,9 @@ You can specify creation or destruction of a deployment and the cloud provider a
 
 To develop and run Ops locally:
 
-  1. Clone the repo `git clone <git url>`
-  2. `cd` into the repo directory and install dependancies with `npm install`
-  3. Run the Op from your local source code with `ops run path/to/op`
+1. Clone the repo `git clone <git url>`
+2. `cd` into the repo directory and install dependancies with `npm install`
+3. Run the Op from your local source code with `ops run path/to/op`
 
 ## Resources
 
