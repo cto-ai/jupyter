@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/cto-ai/jupyter/master/assets/banner.png)
+![](https://cto.ai/static/oss-banner.png)
 
 # Jupyter 🚀
 
