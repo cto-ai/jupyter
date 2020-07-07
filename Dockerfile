@@ -1,11 +1,10 @@
 ############################
 # Build container
 ############################
-FROM node:10-alpine AS dep
+FROM registry.cto.ai/official_images/node:latest as dep
 
 WORKDIR /ops
 
-RUN apk add python make
 ADD package.json .
 RUN npm install
 
@@ -14,15 +13,15 @@ ADD . .
 ############################
 # Final container
 ############################
-FROM node:10-alpine
+FROM registry.cto.ai/official_images/node:latest
 
-RUN apk add ca-certificates docker curl python
+RUN apt-get update && apt-get install curl python-pip -y
 
 # Download and install docker-machine
-RUN wget https://github.com/docker/machine/releases/download/v0.14.0/docker-machine-$(uname -s)-$(uname -m) && \
-    mv docker-machine-Linux-x86_64 docker-machine && \
-    chmod +x docker-machine && \
-    mv docker-machine /usr/local/bin
+#RUN wget https://github.com/docker/machine/releases/download/v0.14.0/docker-machine-$(uname -s)-$(uname -m) && \
+#    mv docker-machine-Linux-x86_64 docker-machine && \
+#    chmod +x docker-machine && \
+#    mv docker-machine /usr/local/bin
 
 # Downloading gcloud package
 RUN curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz > /tmp/google-cloud-sdk.tar.gz
@@ -43,15 +42,7 @@ RUN curl -o /usr/local/bin/ecs-cli https://amazon-ecs-cli.s3.amazonaws.com/ecs-c
 RUN chmod +x /usr/local/bin/ecs-cli
 
 # Install AWS CLI
-RUN apk -v --update add \
-        py-pip \
-        groff \
-        less \
-        mailcap \
-        && \
-    pip install --upgrade awscli==1.14.5 s3cmd==2.0.1 python-magic && \
-    apk -v --purge del py-pip && \
-    rm /var/cache/apk/*
+RUN pip install --upgrade awscli==1.14.5 s3cmd==2.0.1 python-magic
 
 WORKDIR /ops
 

@@ -1,6 +1,7 @@
 version: "1"
 commands:
   - name: jupyter:1.0.0
+    sdk: "2"
     description: Handle deployment and removal of JupyterLab servers for data science applications.
     public: false
     sourceCodeURL: ""

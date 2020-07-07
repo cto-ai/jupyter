@@ -6,37 +6,31 @@ const { white, reset } = ux.colors;
 const flowPrompt = [
   {
     type: 'list',
-    name: 'flow',
-    message: `\nAre you looking to create or destroy a JupyterLab Server? ${reset.green(
-      '→',
-    )}`,
+    name: 'action',
+    message: "Are you looking to create or destroy a JupyterLab Server?",
     choices: [
       'Create',
       'Destroy',
     ],
-    afterMessage: `${reset.green('✓')}`,
+	  flag: 'a',
   },
   {
     type: 'list',
     name: 'provider',
-    message: `\nWhich cloud provider would you like to use?${reset.green(
-      '→',
-    )}`,
+    message: "Which cloud provider would you like to use?",
     choices: [
       'DigitalOcean',
       'Google Cloud',
       'Amazon Web Services',
     ],
-    afterMessage: `${reset.green('✓')}`,
+    flag: 'p',
   },
 ]
 
 const kernelPrompt = {
   type: 'list',
   name: 'kernel',
-  message: `\nPlease select the base image to use. More details ${ux.url('here', 'https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html')}${reset.green(
-    '→',
-  )}`,
+  message: 'Please select the base image to use. More details "https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html"',
   choices: [
     'Base',
     'Minimal',
@@ -47,7 +41,7 @@ const kernelPrompt = {
     'PySpark (SciPy image with support for Spark)',
     'All Spark (Most comprehensive; Python, R, Scala, Julia, SciPy)',
   ],
-  afterMessage: `${reset.green('✓')}`,
+  flag: 'k',
 }
 
 const passwordPrompt = {
@@ -284,78 +278,37 @@ const gcpGPUImage = [
   }
 ]
 
-const awsEssentialPrompts = [
-  {
-    type: 'input',
-    name: 'keyId',
-    message: `\nPlease enter your AWS access key id ${reset.green(
-      '→',
-    )}`,
-    validate: function(input) {
-      if (input) {
-        return true
-      }
-      return 'You must provide a valid AWS access key'
-    },
-    afterMessage: `${reset.green('✓')} id`,
-    afterMessageAppend: `${reset(' added!')}`,
-  },
-  {
-    type: 'input',
-    name: 'key',
-    message: `\nPlease enter your AWS secret access key ${reset.green(
-      '→',
-    )}`,
-    validate: function(input) {
-      if (input) {
-        return true
-      }
-      return 'You must provide a valid secret access key'
-    },
-    afterMessage: `${reset.green('✓')} key`,
-    afterMessageAppend: `${reset(' added!')}`,
-  },
-  {
-    type: 'list',
-    name: 'region',
-    message: `\nPlease select the region to use ${reset.green(
-      '→',
-    )}`,
-    choices: [
-      'us-east-2',
-      'us-east-1',
-      'us-west-1',
-      'us-west-2',
-      'ap-east-1',
-      'ap-south-1',
-      'ap-northeast-3',
-      'ap-northeast-2',
-      'ap-northeast-1',
-      'ap-southeast-2',
-      'ap-southeast-1',
-      'ap-northeast-1',
-      'ca-central-1',
-      'cn-north-1',
-      'cn-northwest-1',
-      'eu-central-1',
-      'eu-west-1',
-      'eu-west-2',
-      'eu-west-3',
-      'eu-north-1',
-      'me-south-1',
-      'sa-east-1',
-      'us-gov-east-1',
-      'us-gov-west-1',
-    ],
-    afterMessage: `${reset.green('✓')}`,
-  },
-]
-
-const awsPrompts = [
-  ...awsEssentialPrompts,
-  passwordPrompt,
-  kernelPrompt,
-]
+const awsRegion = { 
+  type: 'list',
+  name: 'region',
+  message: 'Please select the region to use',
+  choices: [
+    'us-east-2',
+    'us-east-1',
+    'us-west-1',
+    'us-west-2',
+    'ap-east-1',
+    'ap-south-1',
+    'ap-northeast-3',
+    'ap-northeast-2',
+    'ap-northeast-1',
+    'ap-southeast-2',
+    'ap-southeast-1',
+    'ap-northeast-1',
+    'ca-central-1',
+    'cn-north-1',
+    'cn-northwest-1',
+    'eu-central-1',
+    'eu-west-1',
+    'eu-west-2',
+    'eu-west-3',
+    'eu-north-1',
+    'me-south-1',
+    'sa-east-1',
+    'us-gov-east-1',
+    'us-gov-west-1',
+  ],
+}
 
 const updateConfigPrompt = [
   {
@@ -366,6 +319,13 @@ const updateConfigPrompt = [
     )}`,
   }
 ]
+
+const forcePrompt = {
+  type: 'confirm',
+  name: 'force',
+  message: 'Would you like to force create JupyterLabs instance if it already exists?',
+  flag: 'f'
+}
 
 module.exports = {
   flowPrompt,
@@ -380,7 +340,7 @@ module.exports = {
   gcpGPU,
   gcpCPUImage,
   gcpGPUImage,
-  awsEssentialPrompts,
-  awsPrompts,
+  awsRegion,
   updateConfigPrompt,
+  forcePrompt,
 };
