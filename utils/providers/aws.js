@@ -1,5 +1,4 @@
 const { ux, sdk } = require('@cto.ai/sdk')
-const { childProc } = require('../helpers');
 const path = require('path');
 const {
   awsRegion,
@@ -10,8 +9,6 @@ const {
   writeToFileSync,
   getImageName,
   track,
-  useOldCreds,
-  storeCreds,
 } = require('../helpers');
 
 const AWS_DIR = path.resolve(sdk.homeDir() || '', '.aws')
@@ -319,6 +316,11 @@ async function Destroy(creds) {
   })
 
   await ux.spinner.stop(ux.colors.green("Finished tearing down cluster and JupyterLab instance!"))
+
+  // Final cleanup statement.
+  await ux.spinner.start(ux.colors.cyan('Cleaning up Op resources'))
+  await sdk.exec(`rm -r ${AWS_DIR}`)
+  await ux.spinner.stop(ux.colors.cyan('Removed tmp files!'))
 }
 
 module.exports = {
