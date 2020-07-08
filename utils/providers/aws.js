@@ -38,7 +38,7 @@ async function Create(creds) {
       event: 'AWS ecsTaskExecutionRole creation',
       error: `${err}`
     })
-    throw err
+    return
   }
 
   try {
@@ -51,7 +51,7 @@ async function Create(creds) {
       event: 'AWS Creation',
       error: `${err}`
     })
-    throw err
+    return
   }
 
   await ux.spinner.start(ux.colors.cyan('Cleaning up Op resources'))
@@ -74,7 +74,6 @@ async function Create(creds) {
  * @param {boolean} createRole Control if we create the ecsTaskExecutionRole
  */
 async function authenticateAWS(keyId, key, region, createRole) {
-  if (!createRole) return
   // ecs-cli only works with AWS creds written to file...
   const creds = `[default]\naws_access_key_id = ${keyId}\naws_secret_access_key = ${key}\n`
   writeToFileSync({
@@ -90,7 +89,8 @@ async function authenticateAWS(keyId, key, region, createRole) {
     data: config,
   })
 
-  //console.log(util.inspect(keyId, false, null, true))
+  if (!createRole) return
+
   await ux.spinner.start(ux.colors.cyan("Creating ecsTaskExecutionRole IAM role..."))
   try {
     await sdk.exec(`aws iam --region ${region} create-role --role-name ecsTaskExecutionRole --assume-role-policy-document file://config/task-execution-assume-role.json`)
@@ -289,11 +289,12 @@ async function Destroy(creds) {
     await sdk.exec('ecs-cli down -f --cluster-config jupyter-config')
   } catch (err) {
     await ux.spinner.stop(ux.colors.red('Error! Failed to teardown cluster'))
+    sdk.log('err: ', err)
     await track({
       event: 'AWS Destroy',
       error: `${err}`
     })
-    throw err
+    return
   }
 
   await track({
