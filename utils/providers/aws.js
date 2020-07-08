@@ -204,7 +204,7 @@ function createCompose(image, token) {
   sdk.log(ux.colors.cyan("\nUsing docker-compose.yml with contents:\n"))
   sdk.log(compose)
   writeToFileSync({
-    dirPath: "/root/.config/@cto.ai/ops/platform-solutions/jupyter/config",
+    dirPath: `${sdk.homeDir()}/.config/@cto.ai/ops/platform-solutions/jupyter/config`,
     fileName: 'docker-compose.yml',
     data: compose,
   })
@@ -221,7 +221,7 @@ function createECS(subnets, groupId) {
   sdk.log(ux.colors.cyan("\nUsing ecs-params.yml with contents:\n"))
   sdk.log(ecs, "\n")
   writeToFileSync({
-    dirPath: "/root/.config/@cto.ai/ops/platform-solutions/jupyter/config",
+    dirPath: `${sdk.homeDir()}/.config/@cto.ai/ops/platform-solutions/jupyter/config`,
     fileName: 'ecs-params.yml',
     data: ecs,
   })
@@ -236,7 +236,7 @@ async function bootInstance(token) {
   let ip = '';
 
   // Copy docker-compose.yml and ecs-params.yml to our current working directory
-  await sdk.exec('cp /root/.config/@cto.ai/ops/platform-solutions/jupyter/config/* .')
+  await sdk.exec(`cp ${sdk.homeDir()}/.config/@cto.ai/ops/platform-solutions/jupyter/config/* .`)
 
   try {
     // Create our instance
@@ -275,7 +275,7 @@ async function Destroy(creds) {
     await ux.spinner.start(ux.colors.cyan("Tearing down AWS JupyterLab deployment"))
 
     // Copy docker-compose.yml and ecs-params.yml to our current working directory
-    await sdk.exec('cp /root/.config/@cto.ai/ops/platform-solutions/jupyter/config/* .')
+    await sdk.exec(`cp ${sdk.homeDir()}/.config/@cto.ai/ops/platform-solutions/jupyter/config/* .`)
 
     // Remove any running tasks and services
     const { stdout } = await sdk.exec('ecs-cli compose --project-name jupyter service rm --cluster-config jupyter-config')
