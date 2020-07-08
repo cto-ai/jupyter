@@ -34,12 +34,11 @@ async function Create(creds) {
     await authenticateAWS(keyId, key, region, true)
   } catch (err) {
     sdk.log(ux.colors.red("Error creating ecsTaskExecutionRole:"))
-    sdk.log(ux.colors.red(err))
     await track({
       event: 'AWS ecsTaskExecutionRole creation',
       error: `${err}`
     })
-    return
+    throw err
   }
 
   try {
@@ -48,12 +47,11 @@ async function Create(creds) {
     await configureInstance(subnets, groupId, password, image)
     await bootInstance(password)
   } catch (err) {
-    sdk.log(ux.colors.red(err))
     await track({
       event: 'AWS Creation',
       error: `${err}`
     })
-    return
+    throw err
   }
 
   await ux.spinner.start(ux.colors.cyan('Cleaning up Op resources'))
@@ -155,7 +153,6 @@ async function configureCluster(keyId, key, region) {
     })
   } catch (err) {
     await ux.spinner.stop(ux.colors.red('ERROR: Failed to spin up cluster!'))
-    sdk.log('err:\\n', err)
     throw err
   }
   await ux.spinner.stop(ux.colors.green('Finished spinning up cluster!'))
@@ -253,19 +250,6 @@ async function bootInstance(token) {
     if (match && match[1]) {
       ip = match[1];
     }
-    //await childProc(
-    //  'ecs-cli',
-    //  ['compose', '--project-name', 'jupyter', 'service', 'ps', '--ecs-profile', 'ecs-params.yml', '--cluster', 'jupyter', '--cluster-config', 'jupyter-config'],
-    //  // Custom callback to process stdout
-    //  function (data) {
-    //    // Match any IP address
-    //    const regex = /(\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b)/g;
-    //    const match = regex.exec(data)
-    //    if (match && match[1]) {
-    //      ip = match[1];
-    //    }
-    //  }
-    //)
   } catch (err) {
     await ux.spinner.stop(ux.colors.red('ERROR: Failed to boot JupyterLab instance!'))
     throw err
@@ -305,12 +289,11 @@ async function Destroy(creds) {
     await sdk.exec('ecs-cli down -f --cluster-config jupyter-config')
   } catch (err) {
     await ux.spinner.stop(ux.colors.red('Error! Failed to teardown cluster'))
-    sdk.log('err:\\n', err)
     await track({
       event: 'AWS Destroy',
       error: `${err}`
     })
-    return
+    throw err
   }
 
   await track({
