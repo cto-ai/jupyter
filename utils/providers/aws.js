@@ -259,7 +259,7 @@ async function bootInstance(token) {
   }
   await ux.spinner.stop(ux.colors.green('Done, JupyterLab instance is setup!'))
 
-  sdk.log(`Successfully deployed Jupyter Lab to AWS! You can access it here http://${ip}:8888/?token=${token}`)
+  await ux.print(`Successfully deployed Jupyter Lab to AWS! You can access it here http://${ip}:8888/?token=${token}`)
 }
 
 /**
