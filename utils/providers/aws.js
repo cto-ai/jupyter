@@ -125,6 +125,7 @@ async function configureCluster(keyId, key, region) {
     await sdk.exec('ecs-cli configure --cluster jupyter --default-launch-type FARGATE --region ${region} --config-name jupyter-config')
   } catch (err) {
     await ux.spinner.stop(ux.colors.red('ERROR: Cluster config failed!'))
+    sdk.log('err: ', err)
     throw err
   }
   await ux.spinner.stop(ux.colors.green('Cluster config done!'))
@@ -153,6 +154,7 @@ async function configureCluster(keyId, key, region) {
     })
   } catch (err) {
     await ux.spinner.stop(ux.colors.red('ERROR: Failed to spin up cluster!'))
+    sdk.log('err: ', err)
     throw err
   }
   await ux.spinner.stop(ux.colors.green('Finished spinning up cluster!'))
@@ -167,6 +169,7 @@ async function configureCluster(keyId, key, region) {
     }
   } catch (err) {
     await ux.spinner.stop(ux.colors.red('ERROR: Failed to retrieve security group ID!'))
+    sdk.log('err: ', err)
     throw err
   }
   await ux.spinner.stop(ux.colors.green('Fetched security group ID!'))
