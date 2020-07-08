@@ -58,7 +58,7 @@ async function Create(creds) {
 
   await ux.spinner.start(ux.colors.cyan('Cleaning up Op resources'))
   await sdk.exec(`rm -r ${AWS_DIR}`)
-  await ux.spinner.stop(ux.colors.cyan('Removed tmp files!'))
+  await ux.spinner.stop(ux.colors.green('Removed tmp files!'))
 
   await track({
     event: 'AWS Creation',
@@ -133,9 +133,12 @@ async function configureCluster(keyId, key, region) {
 
   try {
     // Ask user is recreating instance is wanted.
+    // Note: ecs-cli fails to destroy cluster using this method, force is not currently supported.
+    // Error: "Timeout waiting for stack operation to complete"
+    // Bug Thread: https://github.com/aws/amazon-ecs-cli/issues/599
     let forceVal = ''
-    const { force } = await ux.prompt(forcePrompt)
-    if (force) { forceVal = '--force' }
+    // const { force } = await ux.prompt(forcePrompt)
+    // if (force) { forceVal = '--force' }
 
     await ux.spinner.start(ux.colors.cyan('Spinning up cluster. This may take a few minutes'))
     const { stdout } = await sdk.exec(`ecs-cli up --instance-role jupyter-profile --cluster-config jupyter-config ${forceVal}`)
@@ -174,7 +177,7 @@ async function configureCluster(keyId, key, region) {
 
   await ux.spinner.start(ux.colors.cyan("Allowing inbound access on port 8888"))
   await sdk.exec(`aws ec2 authorize-security-group-ingress --group-id ${groupId} --protocol tcp --port 8888 --cidr 0.0.0.0/0 --region ${region}`)
-  await ux.spinner.stop(ux.colors.cyan('Inbound access allowed on 8888!'))
+  await ux.spinner.stop(ux.colors.green('Inbound access allowed on 8888!'))
 
   return { subnets, groupId }
 }
@@ -320,7 +323,7 @@ async function Destroy(creds) {
   // Final cleanup statement.
   await ux.spinner.start(ux.colors.cyan('Cleaning up Op resources'))
   await sdk.exec(`rm -r ${AWS_DIR}`)
-  await ux.spinner.stop(ux.colors.cyan('Removed tmp files!'))
+  await ux.spinner.stop(ux.colors.green('Removed tmp files!'))
 }
 
 module.exports = {

@@ -3,7 +3,6 @@ const { LOGO } = require('./constants');
 const { flowPrompt } = require('./prompts');
 const providers = require('./utils/providers');
 const { track } = require('./utils/helpers');
-const util = require('util');
 
 const main = async () => {
   const greeting = `\n👋  Welcome to the Jupyter Notebook initalizer 👋\n\n`
@@ -18,35 +17,15 @@ const main = async () => {
   await ux.print(provider);
 
   let creds = {}
-  //switch (provider) {
-  //  case 'DigitalOcean':
-  //    await action == 'Create' ? providers.DO.Create(creds) : providers.DO.Destroy(creds);
-  //    break;
-  //  case 'Google Cloud':
-  //    await action == 'Create' ? providers.GCP.Create() : providers.GCP.Destroy();
-  //    break;
-  //  case 'Amazon Web Services':
-  //    // Basic necessary credentials.
-  //    creds = {
-  //      keyId: await sdk.getSecret('AWS_ACCESS_KEY_ID'),
-  //      key: await sdk.getSecret('AWS_SECRET_ACCESS_KEY'),
-  //    }
-  //    await action == 'Create' ? providers.AWS.Create(creds) : providers.AWS.Destroy(creds);
-  //    break;
-  //  default:
-  //    sdk.log('Invalid cloud provider selected!')
-  //    track({
-  //      event: 'Cloud provider selection',
-  //      error: `Invalid cloud provider selected - ${provider}`
-  //    })
-  //    return
-  //}
-
   // Need to use if/else block to assign vars in arms based on sdk.getSecret.
   if (provider == 'DigitalOcean') {
-    console.log('digital')
+    sdk.log('DigitalOcean pathway not updated to sdk 2 yet (https://github.com/cto-ai/jupyter/issues/3)')
+    // TODO: Request and set creds for DigitalOcean
+    //await action == 'Create' ? providers.DO.Create(creds) : providers.DO.Destroy(creds);
   } else if (provider == 'Google Cloud') {
-    console.log('google')
+    sdk.log('Google Cloud pathway not updated to sdk 2 yet (https://github.com/cto-ai/jupyter/issues/4)')
+    // TODO: Request and set creds for Google Cloud
+    //await action == 'Create' ? providers.GCP.Create() : providers.GCP.Destroy();
   } else if (provider == 'Amazon Web Services') {
     // Basic necessary credentials.
     const { AWS_ACCESS_KEY_ID } = await sdk.getSecret('AWS_ACCESS_KEY_ID')
