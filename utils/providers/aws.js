@@ -259,7 +259,7 @@ async function bootInstance(token) {
   }
   await ux.spinner.stop(ux.colors.green('Done, JupyterLab instance is setup!'))
 
-  sdk.log('Successfully deployed Jupyter Lab to AWS! You can access it', ux.url('here', `http://${ip}:8888/?token=${token}`))
+  sdk.log(`Successfully deployed Jupyter Lab to AWS! You can access it here http://${ip}:8888/?token=${token}`)
 }
 
 /**
@@ -278,8 +278,7 @@ async function Destroy(creds) {
     await ux.spinner.start(ux.colors.cyan("Tearing down AWS JupyterLab deployment"))
 
     // Copy docker-compose.yml and ecs-params.yml to our current working directory
-    //await sdk.exec(`cp ${sdk.homeDir()}/.config/@cto.ai/ops/platform-solutions/jupyter/config/* .`)
-    await sdk.exec(`ecs-cli configure --cluster jupyter --default-launch-type FARGATE --region ${region} --config-name jupyter-config`)
+    await sdk.exec(`cp ${sdk.homeDir()}/.config/@cto.ai/ops/platform-solutions/jupyter/config/* .`)
 
     // Remove any running tasks and services
     const { stdout } = await sdk.exec('ecs-cli compose --project-name jupyter service rm --cluster-config jupyter-config')
