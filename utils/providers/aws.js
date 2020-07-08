@@ -122,7 +122,7 @@ async function configureCluster(keyId, key, region) {
 
   try {
     await ux.spinner.start(ux.colors.cyan('Configuring cluster'))
-    await sdk.exec('ecs-cli configure --cluster jupyter --default-launch-type FARGATE --region ${region} --config-name jupyter-config')
+    await sdk.exec(`ecs-cli configure --cluster jupyter --default-launch-type FARGATE --region ${region} --config-name jupyter-config`)
   } catch (err) {
     await ux.spinner.stop(ux.colors.red('ERROR: Cluster config failed!'))
     sdk.log('err: ', err)
