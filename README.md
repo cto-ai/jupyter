@@ -12,6 +12,10 @@ Find information about how to run and build Ops via the [Ops Platform Documentat
 
 This Op requires credentials based on which cloud service you would like to deploy to. Instructions for acquiring the credentials for Google Cloud, AWS, or DigitalOcean follows (you only need creds for one).
 
+This Op also requires a password to allow people to be authorized as they connect to the jupyter notebook server:
+
+- **JUPYTER_PASSWORD**: String token or passphrase to be used as the token in the webaddress presented at the end of JupyterLab Instance creation.
+
 ### For AWS
 
 - **AWS Access Key Id**: Generate via: `AWS Management Console` -> `Security Credentials` -> `Access Keys`

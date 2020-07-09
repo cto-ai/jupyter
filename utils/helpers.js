@@ -6,71 +6,6 @@ const { mappings } = require('../config/imageMappings');
 const { updateConfigPrompt } = require('../prompts');
 
 const OP_CONFIG = '/root/.config/@cto.ai/ops/platform-solutions/jupyter/config';
-const validFlags = [
-  '-c', '--create',
-  '-d', '--destroy',
-  '-gcp', '--google',
-  '-aws', '--aws',
-  '-do', '--digitalocean',
-  '--build',
-]
-
-/**
- * processFlags validates runtime the flags and returns the flow and provider.
- *
- * @return {object} The name of the flow and the provider to use
- */
-function processFlags() {
-  // Process passed arguments
-  const argv = process.argv
-  const flags = argv && argv.length ? argv.filter(arg => arg.startsWith('-')) : []
-
-  // Validate the passed flags
-  flags.map(f => {
-    if (!validFlags.includes(f)) {
-      throw new Error(`Invalid flag passed! \nValid flags include ${validFlags}
-      
-      Exiting...`)
-    }
-  })
-
-  const res = {
-    flow: null,
-    provider: null,
-  }
-
-  flags.map(flag => {
-    switch (flag) {
-      case '-c':
-      case '--create':
-        res.flow = 'Create'
-        break;
-      case '-d':
-      case '--destroy':
-        res.flow = 'Destroy'
-        break;
-      case '-do':
-      case '--digitalocean':
-        res.provider = 'DigitalOcean'
-        break;
-      case '-gcp':
-      case '--google':
-        res.provider = 'Google Cloud'
-        break;
-      case '-aws':
-      case '--amazon':
-        res.provider = 'Amazon Web Services'
-        break;
-      default:
-        break;
-    }
-  })
-
-  if (!(res.flow && res.provider)) {
-    throw new Error("Must specify one of --create or --destroy as well as a provider [-do | -gcp | -aws]")
-  }
-  return res
-}
 
 /**
  * childProc spawns a new child process so we can log stdout and stderr.
@@ -145,11 +80,7 @@ const getImageName = kernel => {
  * @param {object} trackingData The tracking metadata to include with the track
  */
 const track = async trackingData => {
-  const { me } = await sdk.user()
   const metadata = {
-    user: {
-      ...me,
-    },
     os: sdk.getHostOS(),
     event: `Jupyter Op - ${trackingData.event}`,
     ...trackingData,
@@ -217,7 +148,6 @@ function storeCreds(data, provider) {
 }
 
 module.exports = {
-  processFlags,
   writeToFileSync,
   getImageName,
   childProc,
